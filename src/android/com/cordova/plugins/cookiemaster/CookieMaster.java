@@ -9,8 +9,6 @@ import org.json.JSONException;
 
 import android.util.Log;
 
-import org.apache.http.cookie.Cookie;
-
 import java.net.HttpCookie;
 
 import android.webkit.CookieManager;
@@ -69,14 +67,7 @@ public class CookieMaster extends CordovaPlugin {
             cordova.getThreadPool().execute(new Runnable() {
                 public void run() {
                     try {
-                        HttpCookie cookie = new HttpCookie(cookieName, cookieValue);
-
-                        String cookieString = cookie.toString().replace("\"", "");
-                        CookieManager cookieManager = CookieManager.getInstance();
-                        cookieManager.setCookie(url, cookieString);
-
-                        PluginResult res = new PluginResult(PluginResult.Status.OK, "Successfully added cookie");
-                        callbackContext.sendPluginResult(res);
+                        callbackContext.error('Invalid function');
                     } catch (Exception e) {
                         Log.e(TAG, "Exception: " + e.getMessage());
                         callbackContext.error(e.getMessage());
