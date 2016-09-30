@@ -11,7 +11,8 @@ import android.util.Log;
 
 import java.net.HttpCookie;
 
-import android.webkit.CookieManager;
+//import android.webkit.CookieManager;
+import org.xwalk.core.XWalkCookieManager;
 
 public class CookieMaster extends CordovaPlugin {
 
@@ -19,6 +20,11 @@ public class CookieMaster extends CordovaPlugin {
     public static final String ACTION_GET_COOKIE_VALUE = "getCookieValue";
     public static final String ACTION_SET_COOKIE_VALUE = "setCookieValue";
     public static final String ACTION_CLEAR_COOKIES = "clearCookies";
+
+    private XWalkCookieManager mCookieManager = null;
+    public CookieMaster() {
+        mCookieManager = new XWalkCookieManager();
+    }
 
     @Override
     public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException {
@@ -30,8 +36,10 @@ public class CookieMaster extends CordovaPlugin {
             cordova.getThreadPool().execute(new Runnable() {
                 public void run() {
                     try {
-                        CookieManager cookieManager = CookieManager.getInstance();
-                        String[] cookies = cookieManager.getCookie(url).split("; ");
+                        //CookieManager cookieManager = CookieManager.getInstance();
+                        //String[] cookies = cookieManager.getCookie(url).split("; ");
+
+                        String[] cookies = mCookieManager.getCookie(url).split("; ");
                         String cookieValue = "";
 
                         for (int i = 0; i < cookies.length; i++) {
@@ -78,7 +86,7 @@ public class CookieMaster extends CordovaPlugin {
         }
 
         else if (ACTION_CLEAR_COOKIES.equals(action)) {
-            CookieManager.getInstance().removeAllCookie();
+            mCookieManager.removeAllCookie();
             callbackContext.success();
             return true;
         }
