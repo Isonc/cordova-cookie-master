@@ -67,7 +67,7 @@ public class CookieMaster extends CordovaPlugin {
             cordova.getThreadPool().execute(new Runnable() {
                 public void run() {
                     try {
-                        callbackContext.error('Invalid function');
+                        callbackContext.error("Invalid function!");
                     } catch (Exception e) {
                         Log.e(TAG, "Exception: " + e.getMessage());
                         callbackContext.error(e.getMessage());
