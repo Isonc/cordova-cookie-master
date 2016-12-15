@@ -44,15 +44,7 @@ public class CookieMaster extends CordovaPlugin {
 
                         for (int i = 0; i < cookies.length; i++) {
                             if (cookies[i].contains(cookieName + "=")) {
-                                String[] cValues = cookies[i].split("=");
-                                cValues[0] = "";
-                                StringBuilder sbStr = new StringBuilder();
-                                for (int ii = 0, il = cValues.length; ii < il; ii++) {
-                                    if (ii > 0 && ii != il-1) {
-                                        sbStr.append(cValues[ii]+"=");
-                                    }
-                                }
-                                cookieValue = sbStr.toString();
+                                cookieValue = cookies[i].substring(cookies[i].indexOf("=")+1);
                                 break;
                             }
                         }
