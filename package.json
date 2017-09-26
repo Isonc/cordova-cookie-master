@@ -1,0 +1,23 @@
+{
+  "version": "1.1.0",
+  "name": "cordova-cookie-master",
+  "cordova_name": "Cookie Master",
+  "description": "",
+  "license": "MIT",
+  "repo": "",
+  "issue": "",
+  "keywords": [
+    "cordova-android",
+    "cordova-ios"
+  ],
+  "platforms": [
+    "android",
+    "ios"
+  ],
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=3.5.0"
+    }
+  ]
+}
