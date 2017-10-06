@@ -11,8 +11,7 @@ import android.util.Log;
 
 import java.net.HttpCookie;
 
-//import android.webkit.CookieManager;
-import org.xwalk.core.XWalkCookieManager;
+import android.webkit.CookieManager;
 
 public class CookieMaster extends CordovaPlugin {
 
@@ -20,11 +19,6 @@ public class CookieMaster extends CordovaPlugin {
     public static final String ACTION_GET_COOKIE_VALUE = "getCookieValue";
     public static final String ACTION_SET_COOKIE_VALUE = "setCookieValue";
     public static final String ACTION_CLEAR_COOKIES = "clearCookies";
-
-    private XWalkCookieManager mCookieManager = null;
-    public CookieMaster() {
-        mCookieManager = new XWalkCookieManager();
-    }
 
     @Override
     public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException {
@@ -36,23 +30,13 @@ public class CookieMaster extends CordovaPlugin {
             cordova.getThreadPool().execute(new Runnable() {
                 public void run() {
                     try {
-                        //CookieManager cookieManager = CookieManager.getInstance();
-                        //String[] cookies = cookieManager.getCookie(url).split("; ");
-
-                        String[] cookies = mCookieManager.getCookie(url).split("; ");
+                        CookieManager cookieManager = CookieManager.getInstance();
+                        String[] cookies = cookieManager.getCookie(url).split("; ");
                         String cookieValue = "";
 
                         for (int i = 0; i < cookies.length; i++) {
                             if (cookies[i].contains(cookieName + "=")) {
-                                String[] cValues = cookies[i].split("=");
-                                cValues[0] = "";
-                                StringBuilder sbStr = new StringBuilder();
-                                for (int ii = 0, il = cValues.length; ii < il; ii++) {
-                                    if (ii > 0 && ii != il-1) {
-                                        sbStr.append(cValues[ii]+"=");
-                                    }
-                                }
-                                cookieValue = sbStr.toString();
+                                cookieValue = cookies[i].split("=")[1].trim();
                                 break;
                             }
                         }
@@ -75,27 +59,46 @@ public class CookieMaster extends CordovaPlugin {
             });
             return true;
 
-        } else if (ACTION_SET_COOKIE_VALUE.equals(action)) {
-            final String url = args.getString(0);
-            final String cookieName = args.getString(1);
-            final String cookieValue = args.getString(2);
+        } 
+//         else if (ACTION_SET_COOKIE_VALUE.equals(action)) {
+//             final String url = args.getString(0);
+//             final String cookieName = args.getString(1);
+//             final String cookieValue = args.getString(2);
 
-            cordova.getThreadPool().execute(new Runnable() {
-                public void run() {
-                    try {
-                        callbackContext.error("Invalid function!");
-                    } catch (Exception e) {
-                        Log.e(TAG, "Exception: " + e.getMessage());
-                        callbackContext.error(e.getMessage());
-                    }
-                }
-            });
-            return true;
-        }
+//             cordova.getThreadPool().execute(new Runnable() {
+//                 public void run() {
+//                     try {
+//                         HttpCookie cookie = new HttpCookie(cookieName, cookieValue);
+
+//                         String cookieString = cookie.toString().replace("\"", "");
+//                         CookieManager cookieManager = CookieManager.getInstance();
+//                         cookieManager.setCookie(url, cookieString);
+
+//                         PluginResult res = new PluginResult(PluginResult.Status.OK, "Successfully added cookie");
+//                         callbackContext.sendPluginResult(res);
+//                     } catch (Exception e) {
+//                         Log.e(TAG, "Exception: " + e.getMessage());
+//                         callbackContext.error(e.getMessage());
+//                     }
+//                 }
+//             });
+//             return true;
+//         }
 
         else if (ACTION_CLEAR_COOKIES.equals(action)) {
-            mCookieManager.removeAllCookie();
-            callbackContext.success();
+
+            CookieManager cookieManager = CookieManager.getInstance();
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+			    cookieManager.removeAllCookies();
+			    cookieManager.flush();
+			} else
+			{
+			    cookieManager.removeAllCookie();
+			    cookieManager.removeSessionCookie();
+			}
+
+			callbackContext.success();
             return true;
         }
 
