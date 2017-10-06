@@ -84,22 +84,22 @@ public class CookieMaster extends CordovaPlugin {
 //             return true;
 //         }
 
-        else if (ACTION_CLEAR_COOKIES.equals(action)) {
+//         else if (ACTION_CLEAR_COOKIES.equals(action)) {
 
-            CookieManager cookieManager = CookieManager.getInstance();
+//             CookieManager cookieManager = CookieManager.getInstance();
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-			    cookieManager.removeAllCookies();
-			    cookieManager.flush();
-			} else
-			{
-			    cookieManager.removeAllCookie();
-			    cookieManager.removeSessionCookie();
-			}
+//             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+// 			    cookieManager.removeAllCookies();
+// 			    cookieManager.flush();
+// 			} else
+// 			{
+// 			    cookieManager.removeAllCookie();
+// 			    cookieManager.removeSessionCookie();
+// 			}
 
-			callbackContext.success();
-            return true;
-        }
+// 			callbackContext.success();
+//             return true;
+//         }
 
         callbackContext.error("Invalid action");
         return false;
